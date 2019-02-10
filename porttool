@@ -1,5 +1,4 @@
 #!/opt/local/bin/bash
-
 function usage_general {
         echo -e "Usage:\nporttool [up/rm] [category] [name] [package]\nEx.: porttool up editors emacs emacs-26.1-201901171502.tardist\n\nporttool [stamp] [name]\nEx.: porttool stamp emacs-26.1.tardist"
 }
