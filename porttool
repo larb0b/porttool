@@ -1,5 +1,14 @@
 #!/opt/local/bin/bash
-if [ "$1" == "up" ]; then
+if [ "$1" == "stamp" ]; then
+	stamp=$(date "+%Y%m%d%H%M")
+	name=$(sed "s/\.[^.]*$/-$stamp&/" <<< $2)
+	echo "Timestamping $2, are you sure? (y/n)"
+	read confirm
+	if [ "$confirm" == "y" ]; then
+		mv "$2" "$name"
+		echo "File now timestamped; moved to $name."
+	fi
+elif [ "$1" == "up" ]; then
 	echo "Uploading to https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
 	read confirm
 	if [ "$confirm" == "y" ]; then
@@ -16,5 +25,5 @@ elif [ "$1" == "rm" ]; then
 		echo "Cancelled."
 	fi
 else
-	echo -e "Usage: porttool [up/rm] [category] [name] [package]\nEx.: porttool up editors emacs emacs-latest.tardist"
+	echo -e "Usage:\nporttool [up/rm] [category] [name] [package]\nEx.: porttool up editors emacs emacs-26.1-201901171502.tardist\n\nporttool [stamp] [name]\nEx.: porttool stamp emacs-26.1.tardist"
 fi
