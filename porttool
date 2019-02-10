@@ -1,0 +1,20 @@
+#!/opt/local/bin/bash
+if [ "$1" == "up" ]; then
+	echo "Uploading to https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
+	read confirm
+	if [ "$confirm" == "y" ]; then
+		aws s3 cp $4 s3://sgi-dev-public/$2/$3/
+	else 
+		echo "Cancelled."
+	fi
+elif [ "$1" == "rm" ]; then
+	echo "Removing https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
+	read confirm
+	if [ "$confirm" == "y" ]; then
+		aws s3 rm s3://sgi-dev-public/$2/$3/$4
+	else
+		echo "Cancelled."
+	fi
+else
+	echo -e "Usage: porttool [up/rm] [category] [name] [package]\nEx.: porttool up editors emacs emacs-latest.tardist"
+fi
