@@ -29,7 +29,7 @@ up)
 		echo -e "Not enough arguments.\n"
 		usage_uprm
 	else
-		echo "Uploading to https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
+		echo "Uploading to s3://sgi-dev-public/$2/$3/$4, are you sure? (y/n)"
 		read confirm
 		if [ "$confirm" == "y" ]; then
 			aws s3 cp $4 s3://sgi-dev-public/$2/$3/
@@ -43,7 +43,7 @@ rm)
                 echo -e "Not enough arguments.\n"
                 usage_uprm
         else
-		echo "Removing https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
+		echo "Removing s3://sgi-dev-public/$2/$3/$4, are you sure? (y/n)"
 		read confirm
 		if [ "$confirm" == "y" ]; then
 			aws s3 rm s3://sgi-dev-public/$2/$3/$4
