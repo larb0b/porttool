@@ -11,7 +11,7 @@ function usage_uprm {
 case "$1" in
 stamp)
 	if [ "$#" -ne 2 ]; then
-		echo "Not enough arguments."
+		echo -e "Not enough arguments.\n"
 		usage_stamp
 	else
 		stamp=$(date "+%Y%m%d%H%M")
