@@ -1,34 +1,59 @@
 #!/opt/local/bin/bash
+
+function usage_general {
+        echo -e "Usage:\nporttool [up/rm] [category] [name] [package]\nEx.: porttool up editors emacs emacs-26.1-201901171502.tardist\n\nporttool [stamp] [name]\nEx.: porttool stamp emacs-26.1.tardist"
+}
+function usage_stamp {
+	echo -e "Usage:\nporttool stamp [name]"
+}
+function usage_uprm {
+	echo -e "Usage:\nporttool [up/rm] [category] [name] [package]"
+}
 case "$1" in
 stamp)
-	stamp=$(date "+%Y%m%d%H%M")
-	name=$(sed "s/\.[^.]*$/-$stamp&/" <<< $2)
-	echo "Timestamping $2, are you sure? (y/n)"
-	read confirm
-	if [ "$confirm" == "y" ]; then
-		mv "$2" "$name"
-		echo "File now timestamped; moved to $name."
+	if [ "$#" -ne 2 ]; then
+		echo "Not enough arguments."
+		usage_stamp
+	else
+		stamp=$(date "+%Y%m%d%H%M")
+		name=$(sed "s/\.[^.]*$/-$stamp&/" <<< $2)
+		echo "Timestamping $2, are you sure? (y/n)"
+		read confirm
+		if [ "$confirm" == "y" ]; then
+			mv "$2" "$name"
+			echo "File now timestamped; moved to $name."
+		fi
 	fi
 	;;
 up)
-	echo "Uploading to https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
-	read confirm
-	if [ "$confirm" == "y" ]; then
-		aws s3 cp $4 s3://sgi-dev-public/$2/$3/
-	else 
-		echo "Cancelled."
+	if [ "$#" -ne 4 ]; then
+		echo -e "Not enough arguments.\n"
+		usage_uprm
+	else
+		echo "Uploading to https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
+		read confirm
+		if [ "$confirm" == "y" ]; then
+			aws s3 cp $4 s3://sgi-dev-public/$2/$3/
+		else 
+			echo "Cancelled."
+		fi
 	fi
 	;;
 rm)
-	echo "Removing https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
-	read confirm
-	if [ "$confirm" == "y" ]; then
-		aws s3 rm s3://sgi-dev-public/$2/$3/$4
-	else
-		echo "Cancelled."
+        if [ "$#" -ne 4 ]; then
+                echo -e "Not enough arguments.\n"
+                usage_uprm
+        else
+		echo "Removing https://ports.sgi.sh/$2/$3/$4, are you sure? (y/n)"
+		read confirm
+		if [ "$confirm" == "y" ]; then
+			aws s3 rm s3://sgi-dev-public/$2/$3/$4
+		else
+			echo "Cancelled."
+		fi
 	fi
 	;;
 *)
-	echo -e "Usage:\nporttool [up/rm] [category] [name] [package]\nEx.: porttool up editors emacs emacs-26.1-201901171502.tardist\n\nporttool [stamp] [name]\nEx.: porttool stamp emacs-26.1.tardist"
+	usage_general
 	;;
 esac
