@@ -21,6 +21,8 @@ stamp)
 		if [ "$confirm" == "y" ]; then
 			mv "$2" "$name"
 			echo "File now timestamped; moved to $name."
+		else
+			echo "Cancelled."
 		fi
 	fi
 	;;
